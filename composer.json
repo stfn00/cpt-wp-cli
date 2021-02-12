@@ -1,0 +1,15 @@
+{
+    "name": "stfn00/cpt-wp-cli",
+    "description": "Generates PHP code for registering a Custom Post Type with WP-CLI.",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Stefano Iachetta",
+            "email": "stefano.iachetta@outlook.it"
+        }
+    ],
+    "require": {
+        "mustache/mustache": "~2.5",
+        "doctrine/inflector": "^2.0"
+    }
+}

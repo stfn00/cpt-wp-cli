@@ -1,0 +1,138 @@
+<?php
+
+/**
+ * Plugin Name:     {{plugin_name}}
+ * Plugin URI:      {{plugin_uri}}
+ * Description:     {{plugin_description}}
+ * Author:          {{plugin_author}}
+ * Author URI:      {{plugin_author_uri}}
+ * Text Domain:     {{textdomain}}
+ * Domain Path:     /languages
+ * Version:         0.1.0
+ *
+ * @package         {{plugin_package}}
+ */
+
+
+
+/**
+ * Registers the `{{slug}}` post type.
+ */
+function {{machine_name}}_init() {
+
+    register_post_type(
+        '{{slug}}',
+        array(
+            'labels'                => array(
+                'name'                  => __( '{{label_plural_ucfirst}}', '{{textdomain}}' ),
+                'singular_name'         => __( '{{label_ucfirst}}', '{{textdomain}}' ),
+                'all_items'             => __( 'All {{label_plural_ucfirst}}', '{{textdomain}}' ),
+                'archives'              => __( '{{label_ucfirst}} Archives', '{{textdomain}}' ),
+                'attributes'            => __( '{{label_ucfirst}} Attributes', '{{textdomain}}' ),
+                'insert_into_item'      => __( 'Insert into {{label}}', '{{textdomain}}' ),
+                'uploaded_to_this_item' => __( 'Uploaded to this {{label}}', '{{textdomain}}' ),
+                'featured_image'        => _x( 'Featured Image', '{{slug}}', '{{textdomain}}' ),
+                'set_featured_image'    => _x( 'Set featured image', '{{slug}}', '{{textdomain}}' ),
+                'remove_featured_image' => _x( 'Remove featured image', '{{slug}}', '{{textdomain}}' ),
+                'use_featured_image'    => _x( 'Use as featured image', '{{slug}}', '{{textdomain}}' ),
+                'filter_items_list'     => __( 'Filter {{label_plural}} list', '{{textdomain}}' ),
+                'items_list_navigation' => __( '{{label_plural_ucfirst}} list navigation', '{{textdomain}}' ),
+                'items_list'            => __( '{{label_plural_ucfirst}} list', '{{textdomain}}' ),
+                'new_item'              => __( 'New {{label_ucfirst}}', '{{textdomain}}' ),
+                'add_new'               => __( 'Add New', '{{textdomain}}' ),
+                'add_new_item'          => __( 'Add New {{label_ucfirst}}', '{{textdomain}}' ),
+                'edit_item'             => __( 'Edit {{label_ucfirst}}', '{{textdomain}}' ),
+                'view_item'             => __( 'View {{label_ucfirst}}', '{{textdomain}}' ),
+                'view_items'            => __( 'View {{label_plural_ucfirst}}', '{{textdomain}}' ),
+                'search_items'          => __( 'Search {{label_plural}}', '{{textdomain}}' ),
+                'not_found'             => __( 'No {{label_plural}} found', '{{textdomain}}' ),
+                'not_found_in_trash'    => __( 'No {{label_plural}} found in trash', '{{textdomain}}' ),
+                'parent_item_colon'     => __( 'Parent {{label_ucfirst}}:', '{{textdomain}}' ),
+                'menu_name'             => __( '{{label_plural_ucfirst}}', '{{textdomain}}' ),
+                'name_admin_bar'        => _x( '{{label_ucfirst}}', 'Add New on Toolbar', '{{textdomain}}' ),
+            ),
+            'public'                => true,
+            'hierarchical'          => false,
+            'show_ui'               => true,
+            'show_in_nav_menus'     => true,
+            'supports'              => array( 'title', 'editor', 'thumbnail' ),
+            // 'taxonomies'            => array('post_tag'),
+            'has_archive'           => true,
+            'rewrite'               => array( 'slug' => '{{slug}}', ),
+            'menu_position'         => null,
+            'menu_icon'             => 'dashicons-{{dashicon}}',
+            'show_in_rest'          => true,
+            // 'map_meta_cap'          => true,
+            // 'capability_type'       => array( '%slug_singular%', '%slug_plural%' ),
+            'rest_base'             => '{{slug}}',
+            'rest_controller_class' => 'WP_REST_Posts_Controller',
+        )
+    );
+}
+add_action( 'init', '{{machine_name}}_init' );
+
+
+
+/**
+ * Sets the post updated messages for the `{{machine_name}}` post type.
+ *
+ * @param  array $messages Post updated messages.
+ * @return array Messages for the `{{machine_name}}` post type.
+ */
+function {{machine_name}}_updated_messages( $messages ) {
+	global $post;
+
+	$permalink = get_permalink( $post );
+
+	$messages['{{slug}}'] = array(
+		0  => '', // Unused. Messages start at index 1.
+		/* translators: %s: post permalink */
+		1  => sprintf( __( '{{label_ucfirst}} updated. <a target="_blank" href="%s">View {{label}}</a>', '{{textdomain}}' ), esc_url( $permalink ) ),
+		2  => __( 'Custom field updated.', '{{textdomain}}' ),
+		3  => __( 'Custom field deleted.', '{{textdomain}}' ),
+		4  => __( '{{label_ucfirst}} updated.', '{{textdomain}}' ),
+		/* translators: %s: date and time of the revision */
+		5  => isset( $_GET['revision'] ) ? sprintf( __( '{{label_ucfirst}} restored to revision from %s', '{{textdomain}}' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false, // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		/* translators: %s: post permalink */
+		6  => sprintf( __( '{{label_ucfirst}} published. <a href="%s">View {{label}}</a>', '{{textdomain}}' ), esc_url( $permalink ) ),
+		7  => __( '{{label_ucfirst}} saved.', '{{textdomain}}' ),
+		/* translators: %s: post permalink */
+		8  => sprintf( __( '{{label_ucfirst}} submitted. <a target="_blank" href="%s">Preview {{label}}</a>', '{{textdomain}}' ), esc_url( add_query_arg( 'preview', 'true', $permalink ) ) ),
+		/* translators: 1: Publish box date format, see https://secure.php.net/date 2: Post permalink */
+		9  => sprintf( __( '{{label_ucfirst}} scheduled for: <strong>%1$s</strong>. <a target="_blank" href="%2$s">Preview {{label}}</a>', '{{textdomain}}' ), date_i18n( __( 'M j, Y @ G:i', '{{textdomain}}' ), strtotime( $post->post_date ) ), esc_url( $permalink ) ),
+		/* translators: %s: post permalink */
+		10 => sprintf( __( '{{label_ucfirst}} draft updated. <a target="_blank" href="%s">Preview {{label}}</a>', '{{textdomain}}' ), esc_url( add_query_arg( 'preview', 'true', $permalink ) ) ),
+	);
+
+	return $messages;
+}
+add_filter( 'post_updated_messages', '{{machine_name}}_updated_messages' );
+
+/**
+ * Sets the bulk post updated messages for the `{{machine_name}}` post type.
+ *
+ * @param  array $bulk_messages Arrays of messages, each keyed by the corresponding post type. Messages are
+ *                              keyed with 'updated', 'locked', 'deleted', 'trashed', and 'untrashed'.
+ * @param  int[] $bulk_counts   Array of item counts for each message, used to build internationalized strings.
+ * @return array Bulk messages for the `{{machine_name}}` post type.
+ */
+function {{machine_name}}_bulk_updated_messages( $bulk_messages, $bulk_counts ) {
+	global $post;
+
+	$bulk_messages['{{slug}}'] = array(
+		/* translators: %s: Number of {{label_plural}}. */
+		'updated'   => _n( '%s {{label}} updated.', '%s {{label_plural}} updated.', $bulk_counts['updated'], '{{textdomain}}' ),
+		'locked'    => ( 1 === $bulk_counts['locked'] ) ? __( '1 {{label}} not updated, somebody is editing it.', '{{textdomain}}' ) :
+						/* translators: %s: Number of {{label_plural}}. */
+						_n( '%s {{label}} not updated, somebody is editing it.', '%s {{label_plural}} not updated, somebody is editing them.', $bulk_counts['locked'], '{{textdomain}}' ),
+		/* translators: %s: Number of {{label_plural}}. */
+		'deleted'   => _n( '%s {{label}} permanently deleted.', '%s {{label_plural}} permanently deleted.', $bulk_counts['deleted'], '{{textdomain}}' ),
+		/* translators: %s: Number of {{label_plural}}. */
+		'trashed'   => _n( '%s {{label}} moved to the Trash.', '%s {{label_plural}} moved to the Trash.', $bulk_counts['trashed'], '{{textdomain}}' ),
+		/* translators: %s: Number of {{label_plural}}. */
+		'untrashed' => _n( '%s {{label}} restored from the Trash.', '%s {{label_plural}} restored from the Trash.', $bulk_counts['untrashed'], '{{textdomain}}' ),
+	);
+
+	return $bulk_messages;
+}
+add_filter( 'bulk_post_updated_messages', '{{machine_name}}_bulk_updated_messages', 10, 2 );
